@@ -198,3 +198,22 @@ from
   inner join employee e1 on e1.'id' = e2.'fk_employee_id' 
 order by 
   e2.'id';
+  /*Create a select query to get only employee name, employee_salary, hobby name with comma-separated(you need to use subquery for hobby name).*/
+SELECT 
+  e.first_name First_Name, 
+  e.last_name Last_Name, 
+  (
+    SELECT 
+      GROUP_CONCAT(h.hobby_Name) 
+    FROM 
+      employee_hobby eh 
+      INNER JOIN hobby h ON h.id = eh.fk_hobby_id 
+    WHERE 
+      e.id = eh.fk_employee_id
+  ) hobby, 
+  SUM(salary) salary 
+FROM 
+  employee_salary es 
+  INNER JOIN employee e ON e.id = es.fk_employee_id 
+GROUP BY 
+  e.id;
